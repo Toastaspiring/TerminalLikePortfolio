@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", function () {
           e.innerHTML += "<div class='plane' id='crypto'>LA CRYPTO C'EST RIGOLO</div>";
           document.getElementById('crypto').addEventListener("animationend", (event) => {});
           onanimationend = (event) => {
-            document.getElementById("crypto").style.display.none
+            document.getElementById("crypto").remove();
             console.log('deleted class from crypto')
           };
           }

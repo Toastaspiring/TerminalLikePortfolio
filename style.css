@@ -43,7 +43,7 @@
   
   @keyframes example{
     0% {color: black; left: 0%;}
-    100% {color: #ffffff; left: 100%;visibility: hidden;}
+    100% {color: #ffffff; left: 100%;}
   }
   
 
