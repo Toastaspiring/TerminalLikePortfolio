@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", function () {
         if (13 === i.keyCode && "" !== (i = n.value.trim())) {
           if (
             ((e.innerHTML +=
-              "<div><span class='ownerTerminal'><b>zachey@profile</b></span>:<b>~$</b> " +
+              "<div><span class='ownerTerminal'><b>marecL@profile</b></span>:<b>~$</b> " +
               i +
               "</div>"),
             (n.value = ""),
@@ -16,50 +16,19 @@ window.addEventListener("DOMContentLoaded", function () {
           )
             e.innerHTML += skillsBar;
           else if ("github" === i || "gh" === i)
-            window.location.href = "https://github.com/zachey01";
+            window.location.href = "https://github.com/Dailyscreen";
           else if ("discord" === i || "ds" === i)
-            window.location.href =
-              "https://discord.com/users/1033246411363471472";
-          else if ("telegram" === i || "tg" === i)
-            window.location.href = "https://t.me/ImZachey";
+            e.innerHTML += "<div>dailyscreen</div>";
           else if ("email" === i || "em" === i)
-            window.location.href = "mailto:zachey@bk.ru";
+            window.location.href = "louismarec@outlook.com";
           else if ("steam" === i || "st" === i)
-            window.location.href = "https://steamcommunity.com/id/zachey01";
-          else if ("youtube" === i || "yt" === i)
-            window.location.href = "https://www.youtube.com/@zachey01";
+            window.location.href = "https://steamcommunity.com/profiles/76561198838986536/";
+          else if ("reddit" === i || "st" === i)
+            window.location.href = "https://www.reddit.com/user/Dsioul/";
+          else if ("webnovel" === i || "st" === i)
+            window.location.href = "https://www.webnovel.com/profile/4316517291";
           else if ("projects" === i || "pj" === i) e.innerHTML += projectCmd;
-          else if ("blog" === i) {
-            let n = [],
-              s = [],
-              i = [],
-              l = [],
-              t = [];
-            fetch("https://mediumpostsapi.vercel.app/api/bjzachey")
-              .then((n) => n.json())
-              .then((e) => {
-                e.dataMedium.forEach((e) => {
-                  n.push(e),
-                    s.push(e.title),
-                    i.push(e.date),
-                    l.push(e.link),
-                    t.push(e.image);
-                }),
-                  n.forEach((n) => {
-                    var e = document.getElementById("blogDiv"),
-                      s = document.createElement("article");
-                    (s.className = "blogArticle"),
-                      (s.onclick = () => linkHref(n.link)),
-                      (s.style.display = "inline-block"),
-                      (s.innerHTML = `\n                        <h2>${n.title}</h2>\n                        <p>📅: ${n.date}</p>\n                      `),
-                      e.appendChild(s);
-                  });
-              })
-              .catch((n) => {
-                console.error(n);
-              }),
-              (e.innerHTML += '<div id="blogDiv"></div>');
-          } else
+          else
             "help" === i
               ? (e.innerHTML += helpCmd)
               : "clear" === i || "c" === i
@@ -120,21 +89,19 @@ window.addEventListener("DOMContentLoaded", function () {
       "skills",
       "clear",
       "projects",
-      "blog",
-      "tools",
       "github",
-      "telegram",
       "discord",
       "email",
       "steam",
-      "youtube",
+      "reddit",
+      "webnovel"
     ],
     helpCmd =
-      '\n  <br>Available commands: <br />\n  [<span class="commandName">skills</span>] or [<span class="commandName">s</span>]\n  <br />\n  [<span class="commandName">projects</span>] or [<span class="commandName">pj</span>]\n  <br />\n  [<span class="commandName">blog</span>]\n  <br /><br />\n  [<span class="commandName">clear</span>]\n  <br /><br />\n  Contact me: <br />\n  [<span class="commandName">github</span>]\n  <br />\n  [<span class="commandName">discord</span>]\n  <br />\n  [<span class="commandName">telegram</span>]\n  <br />\n  [<span class="commandName">email</span>]\n  <br />\n  [<span class="commandName">steam</span>]\n  <br />\n  [<span class="commandName">youtube</span>]',
+      '\n  <br>Available commands: <br />\n  [<span class="commandName">skills</span>] or [<span class="commandName">s</span>]\n  <br />\n  [<span class="commandName">projects</span>] or [<span class="commandName">pj</span>]\n  <br /><br />\n  [<span class="commandName">clear</span>]\n  <br /><br />\n  Contact me: <br />\n  [<span class="commandName">github</span>]\n  <br />\n  [<span class="commandName">discord</span>]\n  <br />\n  [<span class="commandName">reddit</span>]\n  <br />\n  [<span class="commandName">email</span>]\n  <br />\n  [<span class="commandName">steam</span>]\n  <br />\n  [<span class="commandName">webnovel</span>]',
     skillsBar =
-      '\n<div class="container">\n  <div class="flex">\n    <h2>HTML/EJS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem1"></div>\n    </div>\n    <h3>100%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>CSS/SCSS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem2"></div>\n    </div>\n    <h3>100%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>JS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem3"></div>\n    </div>\n    <h3>95%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>TS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem4"></div>\n    </div>\n    <h3>55%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>NODE.JS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem5"></div>\n    </div>\n    <h3>85%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>REACT.JS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem6"></div>\n    </div>\n    <h3>15%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>GO:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem7"></div>\n    </div>\n    <h3>5%</h3>\n  </div>\n\n  <div class="flex">\n  <h2>RUST:</h2>\n  <div class="skillBar">\n    <div class="skillBarItem8"></div>\n  </div>\n  <h3>5%</h3>\n</div>\n</div>',
+      '\n<div class="container">\n  <div class="flex">\n    <h2>HTML/EJS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem1"></div>\n    </div>\n    <h3>50%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>CSS/SCSS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem2"></div>\n    </div>\n    <h3>30%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>JS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem3"></div>\n    </div>\n    <h3>45%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>PYTHON:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem4"></div>\n    </div>\n    <h3>55%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>NODE.JS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem5"></div>\n    </div>\n    <h3>45%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>REACT.JS:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem6"></div>\n    </div>\n    <h3>15%</h3>\n  </div>\n\n  <div class="flex">\n    <h2>LUA:</h2>\n    <div class="skillBar">\n      <div class="skillBarItem7"></div>\n    </div>\n    <h3>30%</h3>\n  </div>\n\n  <div class="flex">\n  <h2>C#:</h2>\n  <div class="skillBar">\n    <div class="skillBarItem8"></div>\n  </div>\n  <h3>60%</h3>\n</div>\n</div>',
     projectCmd =
-      '\n<div class="projectsDiv">\n<article\n  class="article-wrapper"\n  onclick="linkHref(\'https://github.com/zachey01/MimiCMS/\')"\n>\n  <div class="project-info">\n    <div class="flex-pr">\n      <div class="project-title text-nowrap">MimiCMS</div>\n    </div>\n    <div class="flex-pr">\n      <p class="project-description">\n        Modular, fast CMS for <code>CS:GO</code>, <code>CS2</code> (coming soon)\n        servers.\n      </p>\n    </div>\n  </div>\n</article>\n\n<article\n  class="article-wrapper"\n  onclick="linkHref(\'https://github.com/zachey01/terminalPortfolio\')"\n>\n  <div class="project-info">\n    <div class="flex-pr">\n      <div class="project-title text-nowrap">terminal<br />Portfolio</div>\n    </div>\n    <div class="flex-pr">\n      <p class="project-description">\n        A personal website styled for UNIX terminal.\n      </p>\n    </div>\n  </div>\n</article>\n\n</div>\n',
+      '\n<div class="projectsDiv">\n<article\n  class="article-wrapper"\n  onclick="linkHref(\'https://github.com/DailyScreen/PlexusFeed\')"\n>\n  <div class="project-info">\n    <div class="flex-pr">\n      <div class="project-title text-nowrap">PlexusFeed</div>\n    </div>\n    <div class="flex-pr">\n      <p class="project-description">\n        Modular, fast RSS agregator with his own\n        proxy.\n      </p>\n    </div>\n  </div>\n</article>\n\n<article\n  class="article-wrapper"\n  onclick="linkHref(\'https://github.com/DailyScreen/TerminalLikePortfolio\')"\n>\n  <div class="project-info">\n    <div class="flex-pr">\n      <div class="project-title text-nowrap">terminal<br />Portfolio</div>\n    </div>\n    <div class="flex-pr">\n      <p class="project-description">\n        A personal website styled for UNIX terminal.\n      </p>\n    </div>\n  </div>\n</article>\n\n</div>\n',
     blogCmd = '\n<div class="blogArticle" id="blogArticles">\n\n</div>\n';
   (function (o, d, l) {
     try {
