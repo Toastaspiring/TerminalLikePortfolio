@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>A Meaningful Page Title</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+
+    <body>
+        <script src="script.js"></script>
+        <div id="terminal">
+        <div id="mainInfo">
+            <div>
+            <div class="inlineContainer">
+                <pre>
+
+███╗   ███╗ █████╗ ██████╗ ███████╗ ██████╗  
+████╗ ████║██╔══██╗██╔══██╗██╔════╝██╔════╝  
+██╔████╔██║███████║██████╔╝█████╗  ██║       
+██║╚██╔╝██║██╔══██║██╔══██╗██╔══╝  ██║       
+██║ ╚═╝ ██║██║  ██║██║  ██║███████╗╚██████╗ 
+╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝
+
+            </pre
+                >
+                <img src="https://i.redd.it/snoovatar/avatars/0fb22789-8e5c-4e12-93e4-06c2fbf4222e.png" alt class="avatar" />
+            </div>
+            <br>
+            Welcome to my personal website!
+            <br />
+            <div id="helpCmdList"></div>
+            </div>
+        </div>
+        <div id="output"></div>
+        <div id="input" class="command-input">
+            <span id="prompt">
+            <span class="ownerTerminal"><b>marecL@profile</b></span
+            ><b>:~$</b>
+            </span>
+
+            <input
+            type="text"
+            id="cmd"
+            oninput="showSuggestions()"
+            onkeydown="handleKeyDown(event)"
+            />
+        </div>
+
+        <div id="suggestions"></div>
+        </div>
+    </body>
+</html>
