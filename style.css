@@ -26,6 +26,27 @@
     position: relative;
     margin: 10px;
   }
+
+  body .plane {
+    margin: 10px;
+    font-family: monospace;
+    position: relative;
+    right: -500px;
+    background-color: #ffffff;
+    color: #000000;
+    opacity: .9;
+    animation-name: example;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+    z-index: 99;
+  }
+  
+  @keyframes example{
+    0% {color: black; left: 0%;}
+    100% {color: #ffffff; left: 100%;visibility: hidden;}
+  }
+  
+
   body .inlineContainer {
     display: inline-flex;
   }

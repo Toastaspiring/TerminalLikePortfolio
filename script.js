@@ -17,6 +17,15 @@ window.addEventListener("DOMContentLoaded", function () {
             e.innerHTML += skillsBar;
           else if ("github" === i || "gh" === i)
             window.location.href = "https://github.com/Dailyscreen";
+          else if ("crypto" === i || "bouvier" === i) 
+          {
+          e.innerHTML += "<div class='plane' id='crypto'>LA CRYPTO C'EST RIGOLO</div>";
+          document.getElementById('crypto').addEventListener("animationend", (event) => {});
+          onanimationend = (event) => {
+            document.getElementById("crypto").style.display.none
+            console.log('deleted class from crypto')
+          };
+          }
           else if ("discord" === i || "ds" === i)
             e.innerHTML += "<div>dailyscreen</div>";
           else if ("email" === i || "em" === i)
