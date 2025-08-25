@@ -1,3 +1,10 @@
+:root {
+    --background: #ffffff;
+    --text: #000000;
+    --prompt: rgb(240, 154, 74);
+    --command: rgb(255, 7, 7);
+}
+
 .blogArticle {
     border: 2px solid plum;
     border-radius: 10px;
@@ -7,310 +14,153 @@
     margin: 10px;
     cursor: pointer;
     transition: border-color 0.3s ease-in-out;
-  }
-  .blogArticle:hover {
+}
+.blogArticle:hover {
     box-shadow: 0 0 0.5em 0 #5e5e5e;
     border-color: plum;
-  }
-  * {
+}
+* {
     font-size: 20px;
-  }
-  body {
-    color: #ffffff;
+}
+body {
+    color: var(--text);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 90vh;
-    background-color: #ffffff;
+    background-color: var(--background);
     background-size: 100%;
     position: relative;
     margin: 10px;
-  }
+}
 
-  body .plane {
+body .plane {
     margin: 10px;
     font-family: monospace;
     position: relative;
     right: -500px;
-    background-color: #ffffff;
-    color: #000000;
-    opacity: .9;
+    background-color: var(--background);
+    color: var(--text);
+    opacity: 0.9;
     animation-name: example;
     animation-duration: 3s;
     animation-fill-mode: forwards;
     z-index: 99;
-  }
-  
-  @keyframes example{
-    0% {color: black; left: 0%;}
-    100% {color: #ffffff; left: 100%;}
-  }
-  
+}
 
-  body .inlineContainer {
+@keyframes example {
+    0% {
+        color: black;
+        left: 0%;
+    }
+    100% {
+        color: #ffffff;
+        left: 100%;
+    }
+}
+
+body .inlineContainer {
     display: inline-flex;
-  }
-  body .commandName {
-    color: rgb(255, 7, 7);
-  }
-  body .avatar {
+}
+body .commandName {
+    color: var(--command);
+}
+body .avatar {
     margin-left: -25px;
     opacity: 0.9;
     width: 155px;
     pointer-events: none;
     height: 175px;
-  }
-  body #terminal {
+}
+body #terminal {
     font-family: monospace;
-    color: #000000;
+    color: var(--text);
     height: 95%;
     width: 95%;
-  }
-  body #terminal #output {
+}
+body #terminal #output {
     margin-bottom: 10px;
-  }
-  body #terminal #input {
+}
+body #terminal #input {
     margin-top: 20px;
-  }
-  body #terminal #prompt {
+}
+body #terminal #prompt {
     font-weight: 700;
-  }
-  body #terminal #cmd {
+}
+body #terminal #cmd {
     font-family: monospace;
     font-size: 20px;
     background: 0 0;
     border: none;
-    color: #000000;
+    color: var(--text);
     outline: 0;
     transition: caret-color 0.3s ease;
     width: 70%;
-  }
-  body #terminal #cmd:focus {
-    caret-color: #000000;
-  }
-  body #terminal #suggestions {
-    margin-top: 10px;
-    color: #000000;
-  }
-  body #terminal #suggestions .selected {
-    font-weight: 800;
-    color: rgb(255, 7, 7);
-  }
-  body #terminal .ownerTerminal {
-    font-size: 20px;
-    color: rgb(240, 154, 74);
-  }
-  @keyframes destroyAnimation {
-    0% {
-      transform: scale(1);
-      opacity: 1;
+}
+body #terminal #cmd:focus {
+    caret-color: transparent;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        border-right: 10px solid var(--text);
     }
     50% {
-      transform: scale(1.2);
-      opacity: 0.5;
+        border-right: 10px solid transparent;
+    }
+}
+
+body #terminal #suggestions {
+    margin-top: 10px;
+    color: var(--text);
+}
+body #terminal #suggestions .selected {
+    font-weight: 800;
+    color: var(--command);
+}
+body #terminal .ownerTerminal {
+    font-size: 20px;
+    color: var(--prompt);
+}
+@keyframes destroyAnimation {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.5;
     }
     100% {
-      transform: scale(0);
-      opacity: 0.2;
+        transform: scale(0);
+        opacity: 0.2;
     }
-  }
-  .command-input {
+}
+.command-input {
     font-weight: 400;
-  }
-  .command-input.command-entered {
+}
+.command-input.command-entered {
     font-weight: 700;
-  }
-  .nameErr {
+}
+.nameErr {
     font-size: 100px;
-  }
-  .descErr {
+}
+.descErr {
     font-size: 10px;
-  }
-  .projectsDiv {
-    display: inline-flex;
-    margin-top: 20px;
-  }
-  .article-wrapper {
-    margin: 10px;
-    width: 250px;
-    transition: 0.15s all ease-in-out;
-    border-radius: 2px;
-    padding: 5px;
-    border: 2px solid;
-    cursor: pointer;
-    background-color: #ffffff;
-  }
-  .article-wrapper:hover {
-    box-shadow: 10px 10px 0 #5abb9a, 20px 20px 0 plum;
-    border-color: 4px solid #2d0922;
-    transform: translate(-20px, -20px);
-  }
-  .article-wrapper:active {
-    box-shadow: none;
-    transform: translate(0);
-  }
-  .article-wrapper:hover .project-hover {
-    transform: rotate(-45deg);
-    background-color: #a6c2f0;
-  }
-  .project-info {
-    padding: 10px 0 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  .project-info .project-title {
-    font-size: 2em;
-    margin: 0;
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #000;
-  }
-  .project-info .project-description {
-    color: #000;
-    font-weight: 300;
-  }
-  .project-info .flex-pr {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .project-hover {
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    padding: 9px;
-    transition: all 0.3s ease;
-  }
-  .container-project {
-    width: 100%;
-    height: 170px;
-    background: gray;
-  }
-  body .container .flex {
-    display: inline-flex;
-    margin: 20px;
-  }
-  .skillBar {
-    width: 250px;
-    height: 30px;
-    border: 1px solid #ffebcd;
-    margin: 0 20px;
-    display: flex;
-    align-items: center;
-  }
-  .skillBarItem1 {
-    width: 50%;
-    height: 30px;
-    background: #ffebcd;
-    animation: slide1 2s ease-in-out;
-  }
-  .skillBarItem2 {
-    width: 30%;
-    height: 30px;
-    background: #ffebcd;
-    animation: slide2 2s ease-in-out;
-  }
-  .skillBarItem3 {
-    width: 45%;
-    height: 30px;
-    background: #ffebcd;
-    animation: slide3 2s ease-in-out;
-  }
-  .skillBarItem4 {
-    width: 55%;
-    height: 30px;
-    background: #ffebcd;
-    animation: slide4 2s ease-in-out;
-  }
-  .skillBarItem5 {
-    width: 45%;
-    height: 30px;
-    background: #ffebcd;
-    animation: slide5 2s ease-in-out;
-  }
-  .skillBarItem6 {
-    width: 15%;
-    height: 30px;
-    background: #ffebcd;
-    animation: slide6 2s ease-in-out;
-  }
-  .skillBarItem7 {
-    width: 30%;
-    height: 30px;
-    background: #ffebcd;
-    animation: slide7 2s ease-in-out;
-  }
-  .skillBarItem8 {
-    width: 60%;
-    height: 30px;
-    background: #ffebcd;
-    animation: slide8 2s ease-in-out;
-  }
-  @keyframes slide1 {
-    from {
-      width: 0;
-    }
-    to {
-      width: 50%;
-    }
-  }
-  @keyframes slide2 {
-    from {
-      width: 0;
-    }
-    to {
-      width: 30%;
-    }
-  }
-  @keyframes slide3 {
-    from {
-      width: 0;
-    }
-    to {
-      width: 45%;
-    }
-  }
-  @keyframes slide4 {
-    from {
-      width: 0;
-    }
-    to {
-      width: 55%;
-    }
-  }
-  @keyframes slide5 {
-    from {
-      width: 0;
-    }
-    to {
-      width: 45%;
-    }
-  }
-  @keyframes slide6 {
-    from {
-      width: 0;
-    }
-    to {
-      width: 15%;
-    }
-  }
-  @keyframes slide7 {
-    from {
-      width: 0;
-    }
-    to {
-      width: 30%;
-    }
-  }
-  @keyframes slide8 {
-    from {
-      width: 0;
-    }
-    to {
-      width: 60%;
-    }
-  }
+}
+
+a {
+    color: var(--command);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
   
