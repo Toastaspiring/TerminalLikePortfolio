@@ -9,7 +9,14 @@ const config = {
     // The ascii art to display.
     // You can use this website to generate ascii art: https://patorjk.com/software/taag/
     // and this website to convert it to a string: https://tools.knowledgewalls.com/convert-multiline-string-to-single-line
-    ascii: "███╗   ███╗ █████╗ ██████╗ ███████╗ ██████╗  \n████╗ ████║██╔══██╗██╔══██╗██╔════╝██╔════╝  \n██╔████╔██║███████║██████╔╝█████╗  ██║       \n██║╚██╔╝██║██╔══██║██╔══██╗██╔══╝  ██║       \n██║ ╚═╝ ██║██║  ██║██║  ██║███████╗╚██████╗ \n╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ",
+    ascii: `
+    d8888b.  .d8b.  d8888b. d88888b d8888b. d88888b  .d88b.  db    db
+    88  '8D d8' '8b 88  '8D 88'     88  '8D 88'     .8P  Y8. '8b  d8'
+    88   88 88ooo88 88oobY' 88ooooo 88oobY' 88ooooo 88    88  '8bd8'
+    88   88 88~~~88 88'b..  88~~~~~ 88'b..  88~~~~~ 88    88    88
+    88  .8D 88   88 88'  YD. 88.     88'  YD. 88.     '8b  d8.   88
+    Y8888D' YP   YP 88'   YD Y88888P 88'   YD Y88888P  'Y88P'    YP
+    `,
 
     // -- THEME --
     // The theme of the terminal. You can choose between "dark" and "light".
@@ -89,7 +96,61 @@ const config = {
             description: "Open my webnovel profile",
             aliases: ["wn"],
         },
+        {
+            name: "theme",
+            description: "Change the theme of the terminal",
+            aliases: ["th"],
+        },
+        {
+            name: "neofetch",
+            description: "Display system information",
+            aliases: ["nf"],
+        },
     ],
+
+    neofetch: {
+        ascii: `
+
+            ....
+           .......
+          ..'' G. ''.
+         .. '  ....' ..
+        ..  '..''''..'  ..
+       ..    '......'    ..
+      ..      '....'      ..
+     ..        ''''        ..
+    ..          ''          ..
+   ............................
+   ............................
+   ..          ''          ..
+    ..        ''''        ..
+     ..      '....'      ..
+      ..    '......'    ..
+       ..  '..''''..'  ..
+        .. '  ....' ..
+         ..'' .... ''.
+           .......
+            ....
+
+        `,
+        info: {
+            "OS": "Arch Linux",
+            "Host": "Portfolio v1.0",
+            "Kernel": "6.1.12-arch1-1",
+            "Uptime": "1 day, 2 hours, 34 minutes",
+            "Packages": "1 (npm)",
+            "Shell": "bash",
+            "Resolution": "1920x1080",
+            "DE": "Portfolio",
+            "WM": "Terminal",
+            "Theme": "gruvbox-dark",
+            "Icons": "Papirus-Dark",
+            "Terminal": "Portfolio",
+            "CPU": "Intel i7-11800H @ 4.60GHz",
+            "GPU": "NVIDIA GeForce RTX 3070",
+            "Memory": "16GiB / 32GiB",
+        }
+    },
 
     // -- LINKS --
     // The links to open when the user types the command.
