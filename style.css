@@ -32,7 +32,6 @@ body {
     background-size: 100%;
     position: relative;
     margin: 10px;
-    text-shadow: 0 0 5px var(--text);
 }
 
 body .plane {

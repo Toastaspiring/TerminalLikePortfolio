@@ -14,6 +14,10 @@ window.addEventListener("DOMContentLoaded", function () {
     };
 
     let currentSuggestionIndex = -1;
+    let history = [];
+    let historyIndex = 0;
+    let currentPath = "~";
+    let filesystem = config.filesystem;
 
     const init = () => {
         applyTheme();
@@ -28,7 +32,7 @@ window.addEventListener("DOMContentLoaded", function () {
         term.avatar.src = config.avatar;
 
         // set the prompt
-        term.prompt.innerHTML = `<span class="ownerTerminal"><b>${config.owner}@${config.website}</b></span><b>:~$</b>`;
+        updatePrompt();
 
         // set the suggestions
         const suggestions = config.commands.map((cmd) => cmd.name);
@@ -57,12 +61,18 @@ window.addEventListener("DOMContentLoaded", function () {
         if (e.keyCode === 13) {
             const cmd = term.cmd.value.trim();
             if (cmd !== "") {
-                term.output.innerHTML += `<div><span class="ownerTerminal"><b>${config.owner}@${config.website}</b></span><b>:~$</b> ${cmd}</div>`;
+                history.push(cmd);
+                historyIndex = history.length;
+                term.output.innerHTML += `<div><span class="ownerTerminal"><b>${config.owner}@${config.website}</b></span><b>:${currentPath}$</b> ${cmd}</div>`;
                 term.cmd.value = "";
                 handleCommand(cmd);
                 term.output.scrollTop = term.output.scrollHeight;
             }
         }
+    };
+
+    const updatePrompt = () => {
+        term.prompt.innerHTML = `<span class="ownerTerminal"><b>${config.owner}@${config.website}</b></span><b>:${currentPath}$</b>`;
     };
 
     const type = async (text, element) => {
@@ -82,13 +92,13 @@ window.addEventListener("DOMContentLoaded", function () {
         if (command) {
             switch (command.name) {
                 case "help":
-                    await type(term.helpCmdList.innerHTML, outputElement);
+                    outputElement.innerHTML = term.helpCmdList.innerHTML;
                     break;
                 case "skills":
-                    await type(getSkills(), outputElement);
+                    outputElement.innerHTML = getSkills();
                     break;
                 case "projects":
-                    await type(getProjects(), outputElement);
+                    outputElement.innerHTML = getProjects();
                     break;
                 case "clear":
                     term.output.innerHTML = "";
@@ -117,12 +127,66 @@ window.addEventListener("DOMContentLoaded", function () {
                     await type(`Theme changed to ${config.theme}`, outputElement);
                     break;
                 case "neofetch":
-                    await type(getNeofetch(), outputElement);
+                    outputElement.innerHTML = getNeofetch();
+                    break;
+                case "ls":
+                    await type(ls(), outputElement);
+                    break;
+                case "cd":
+                    cd(cmd.split(" ")[1]);
+                    break;
+                case "cat":
+                    await type(cat(cmd.split(" ")[1]), outputElement);
                     break;
             }
         } else {
             await type(`command not found: ${cmd}`, outputElement);
         }
+    };
+
+    const getDir = () => {
+        let dir = filesystem;
+        const path = currentPath.split("/").filter(p => p);
+        if (path.length === 0) return dir["~"];
+        dir = dir["~"];
+        for (const p of path) {
+            if (p === "~") continue;
+            dir = dir.children[p];
+        }
+        return dir;
+    };
+
+    const ls = () => {
+        const dir = getDir();
+        if (dir.type !== "directory") {
+            return "ls: not a directory";
+        }
+        return Object.keys(dir.children).join("\n");
+    };
+
+    const cd = (path) => {
+        if (!path || path === "~") {
+            currentPath = "~";
+        } else if (path === "..") {
+            const pathParts = currentPath.split("/").filter(p => p && p !== '~');
+            pathParts.pop();
+            currentPath = pathParts.length > 0 ? pathParts.join("/") : "~";
+        } else {
+            const dir = getDir();
+            if (!dir.children[path] || dir.children[path].type !== "directory") {
+                return "cd: no such file or directory";
+            }
+            currentPath = currentPath === "~" ? path : `${currentPath}/${path}`;
+        }
+        updatePrompt();
+    };
+
+    const cat = (file) => {
+        const dir = getDir();
+        if (!dir.children[file] || dir.children[file].type !== "file") {
+            return "cat: no such file";
+        }
+        return dir.children[file].content;
     };
 
     const applyTheme = () => {
@@ -197,23 +261,40 @@ function showSuggestions() {
 function handleKeyDown(n) {
     var e,
         s = document.getElementById("suggestions"),
-        i = s.getElementsByTagName("div");
-    "ArrowUp" === n.key
-        ? (n.preventDefault(),
-          0 < currentSuggestionIndex && currentSuggestionIndex--)
-        : "ArrowDown" === n.key
-        ? (n.preventDefault(),
-          currentSuggestionIndex < i.length - 1 && currentSuggestionIndex++)
-        : "Enter" === n.key &&
-          ((n = document.getElementById("cmd")),
-          (e = i[currentSuggestionIndex]) && (n.value = e.textContent),
-          (s.innerHTML = ""),
-          n.classList.remove("command-entered"));
-    for (let n = 0; n < i.length; n++) {
-        var l = i[n];
-        n === currentSuggestionIndex
-            ? l.classList.add("selected")
-            : l.classList.remove("selected");
+        i = s.getElementsByTagName("div"),
+        cmd = document.getElementById("cmd");
+
+    if ("ArrowUp" === n.key) {
+        n.preventDefault();
+        if (historyIndex > 0) {
+            historyIndex--;
+            cmd.value = history[historyIndex];
+        }
+    } else if ("ArrowDown" === n.key) {
+        n.preventDefault();
+        if (historyIndex < history.length - 1) {
+            historyIndex++;
+            cmd.value = history[historyIndex];
+        } else {
+            historyIndex = history.length;
+            cmd.value = "";
+        }
+    } else if ("Enter" === n.key) {
+        e = i[currentSuggestionIndex];
+        if (e) {
+            cmd.value = e.textContent;
+        }
+        s.innerHTML = "";
+        cmd.classList.remove("command-entered");
+    }
+
+    if (i.length > 0) {
+        for (let n = 0; n < i.length; n++) {
+            var l = i[n];
+            n === currentSuggestionIndex
+                ? l.classList.add("selected")
+                : l.classList.remove("selected");
+        }
     }
 }
   
