@@ -92,13 +92,13 @@ window.addEventListener("DOMContentLoaded", function () {
         if (command) {
             switch (command.name) {
                 case "help":
-                    await type(term.helpCmdList.innerHTML, outputElement);
+                    outputElement.innerHTML = term.helpCmdList.innerHTML;
                     break;
                 case "skills":
-                    await type(getSkills(), outputElement);
+                    outputElement.innerHTML = getSkills();
                     break;
                 case "projects":
-                    await type(getProjects(), outputElement);
+                    outputElement.innerHTML = getProjects();
                     break;
                 case "clear":
                     term.output.innerHTML = "";
@@ -127,7 +127,7 @@ window.addEventListener("DOMContentLoaded", function () {
                     await type(`Theme changed to ${config.theme}`, outputElement);
                     break;
                 case "neofetch":
-                    await type(getNeofetch(), outputElement);
+                    outputElement.innerHTML = getNeofetch();
                     break;
                 case "ls":
                     await type(ls(), outputElement);
