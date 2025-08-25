@@ -1,53 +1,495 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>A Meaningful Page Title</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Portfolio</title>
+    <style>
+        /* * General Styling & Theme Setup */
+        :root {
+            --background: #000000;
+            --text: #ffffff;
+            --prompt: rgb(240, 154, 74);
+            --command: rgb(255, 7, 7);
+            --error: rgb(255, 85, 85);
+        }
 
+        * {
+            box-sizing: border-box;
+        }
 
-    <body>
-        <script src="config.js"></script>
-        <script src="script.js"></script>
-        <div id="terminal">
-        <div id="mainInfo">
-            <div>
-            <div class="inlineContainer">
-                <pre>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
 
-███╗   ███╗ █████╗ ██████╗ ███████╗ ██████╗  
-████╗ ████║██╔══██╗██╔══██╗██╔════╝██╔════╝  
-██╔████╔██║███████║██████╔╝█████╗  ██║       
-██║╚██╔╝██║██╔══██║██╔══██╗██╔══╝  ██║       
-██║ ╚═╝ ██║██║  ██║██║  ██║███████╗╚██████╗ 
-╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝
+        body {
+            font-family: monospace;
+            font-size: 16px;
+            color: var(--text);
+            background-color: var(--background);
+        }
 
-            </pre
-                >
-                <img src="https://i.redd.it/snoovatar/avatars/0fb22789-8e5c-4e12-93e4-06c2fbf4222e.png" alt class="avatar" />
-            </div>
+        /* * Terminal Layout
+         * The terminal is a single, scrollable container.
+         * The scrollbar is hidden for a cleaner look.
+         */
+        #terminal {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            overflow-y: auto; /* The entire terminal scrolls */
+            word-wrap: break-word;
+            line-height: 1.4;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+
+        #terminal::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, and Opera */
+        }
+
+        /* * Input Line & Prompt Styling */
+        .input-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .prompt {
+            font-weight: 700;
+            white-space: nowrap;
+            margin-right: 8px;
+        }
+
+        /* * Command Input & Cursor */
+        .cmd-input {
+            font-family: monospace;
+            font-size: 1em;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            outline: none;
+            width: 100%;
+            padding: 0;
+            caret-color: var(--text);
+        }
+
+        /* * Miscellaneous & Helper Styles */
+        .ownerTerminal {
+            color: var(--prompt);
+        }
+        
+        .commandName {
+            color: var(--command);
+        }
+        
+        .error {
+            color: var(--error);
+        }
+
+        a {
+            color: var(--command);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            font-size: 1em;
+            line-height: 1.2;
+        }
+        
+        .neofetchContainer {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <!-- The entire terminal is now a single container -->
+    <div id="terminal">
+        <!-- Initial "startup" content -->
+        <div id="startup">
+            <pre id="ascii-art"></pre>
+            <div>Welcome to my personal website!</div>
+            <div>Type 'help' to see available commands.</div>
             <br>
-            Welcome to my personal website!
-            <br />
-            <div id="helpCmdList"></div>
-            </div>
         </div>
-        <div id="output"></div>
-        <div id="input" class="command-input">
-            <span id="prompt">
-            <span class="ownerTerminal"><b>marecL@profile</b></span
-            ><b>:~$</b>
-            </span>
+        <!-- Command outputs and new input lines will be appended here -->
+    </div>
 
-            <input
-            type="text"
-            id="cmd"
-            oninput="showSuggestions()"
-            onkeydown="handleKeyDown(event)"
-            />
-        </div>
+    <script>
+        // --- CONFIGURATION ---
+        const config = {
+            owner: "marecL",
+            website: "profile",
+            ascii: "███╗   ███╗ █████╗ ██████╗ ███████╗ ██████╗  \n████╗ ████║██╔══██╗██╔══██╗██╔════╝██╔════╝  \n██╔████╔██║███████║██████╔╝█████╗  ██║       \n██║╚██╔╝██║██╔══██║██╔══██╗██╔══╝  ██║       \n██║ ╚═╝ ██║██║  ██║██║  ██║███████╗╚██████╗ \n╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ",
+            theme: "dark",
+            colors: {
+                light: { background: "#ffffff", text: "#000000", prompt: "rgb(240, 154, 74)", command: "rgb(255, 7, 7)" },
+                dark: { background: "#000000", text: "#ffffff", prompt: "rgb(240, 154, 74)", command: "rgb(255, 7, 7)" },
+            },
+            commands: [
+                { name: "help", description: "Display the available commands.", aliases: ["h"] },
+                { name: "clear", description: "Clear the terminal screen.", aliases: ["c"] },
+                { name: "reboot", description: "Reboot the terminal.", aliases: [] },
+                { name: "date", description: "Display the current date and time.", aliases: [] },
+                { name: "whoami", description: "Display the current user.", aliases: [] },
+                { name: "history", description: "Show command history.", aliases: [] },
+                { name: "echo", description: "Display a line of text.", aliases: [] },
+                { name: "sudo", description: "Execute a command as the superuser (for fun).", aliases: [] },
+                { name: "ls", description: "List directory contents.", aliases: [] },
+                { name: "cd", description: "Change the current directory.", aliases: [] },
+                { name: "pwd", description: "Print the name of the current working directory.", aliases: [] },
+                { name: "cat", description: "Concatenate and display files.", aliases: [] },
+                { name: "touch", description: "Create an empty file.", aliases: [] },
+                { name: "mkdir", description: "Create a new directory.", aliases: [] },
+                { name: "rm", description: "Remove files or directories.", aliases: [] },
+                { name: "skills", description: "Display my skills.", aliases: ["s"] },
+                { name: "projects", description: "Display my projects.", aliases: ["p"] },
+                { name: "github", description: "Open my GitHub profile.", aliases: ["gh"] },
+                { name: "theme", description: "Change the terminal theme.", aliases: ["th"] },
+                { name: "neofetch", description: "Display system information.", aliases: ["nf"] },
+            ],
+            filesystem: {
+                '/': {
+                    type: 'directory',
+                    children: {
+                        'home': {
+                            type: 'directory',
+                            children: {
+                                'marecL': {
+                                    type: 'directory',
+                                    children: {
+                                        'about.txt': { type: 'file', content: 'This is a file about me, marecL.\nI am a web developer interested in creating cool things for the internet.' },
+                                        'projects': {
+                                            type: 'directory',
+                                            children: {
+                                                'portfolio.txt': { type: 'file', content: 'This portfolio was made with HTML, CSS and JS.' }
+                                            }
+                                        },
+                                        'contact.txt': { type: 'file', content: 'You can reach out via the `email` or `discord` commands.' },
+                                    }
+                                }
+                            }
+                        },
+                        'etc': {
+                            type: 'directory',
+                            children: {
+                                'motd': { type: 'file', content: 'Welcome to marecL\'s terminal portfolio!\nHave a look around using `ls` and `cd`.' },
+                                'config': { type: 'file', content: '## MOCK CONFIGURATION ##\nTHEME=dark\nPROMPT=\'$USER@$HOST:$PWD$\'' }
+                            }
+                        },
+                        'bin': {
+                            type: 'directory',
+                            children: {
+                                'ls': { type: 'file', content: 'executable' },
+                                'cat': { type: 'file', content: 'executable' },
+                                'pwd': { type: 'file', content: 'executable' }
+                            }
+                        },
+                        'var': {
+                            type: 'directory',
+                            children: {
+                                'log': {
+                                    type: 'directory',
+                                    children: {
+                                        'sys.log': { type: 'file', content: 'System boot... OK\nServices started... OK' }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            neofetch: {
+                ascii: `
+            ....
+           .......
+          ..'' G. ''.
+         .. '  ....' ..
+        ..  '..''''..'  ..
+       ..    '......'    ..
+      ..      '....'      ..
+     ..        ''''        ..
+    ..          ''          ..
+   ............................
+   ............................
+   ..          ''          ..
+    ..        ''''        ..
+     ..      '....'      ..
+      ..    '......'    ..
+       ..  '..''''..'  ..
+        .. '  ....' ..
+         ..'' .... ''.
+           .......
+            ....`,
+                info: { "OS": "Arch Linux", "Host": "Portfolio v1.0", "Kernel": "6.1.12-arch1-1", "Uptime": "1 day, 2 hours, 34 minutes", "Packages": "1 (npm)", "Shell": "bash", "Resolution": "1920x1080", "DE": "Portfolio", "WM": "Terminal", "Theme": "gruvbox-dark", "Icons": "Papirus-Dark", "Terminal": "Portfolio", "CPU": "Intel i7-11800H @ 4.60GHz", "GPU": "NVIDIA GeForce RTX 3070", "Memory": "16GiB / 32GiB" }
+            },
+            links: { github: "https://github.com/Dailyscreen", discord: "dailyscreen", email: "louismarec@outlook.com", steam: "https://steamcommunity.com/profiles/76561198838986536/", reddit: "https://www.reddit.com/user/Dsioul/", webnovel: "https://www.webnovel.com/profile/4316517291" },
+            skills: [ { name: "HTML/EJS", level: 50 }, { name: "CSS/SCSS", level: 30 }, { name: "JS", level: 45 }, { name: "PYTHON", level: 55 }, { name: "NODE.JS", level: 45 }, { name: "REACT.JS", level: 15 }, { name: "LUA", level: 30 }, { name: "C#", level: 60 } ],
+            projects: [ { name: "PlexusFeed", description: "Modular, fast RSS agregator with his own proxy.", link: "https://github.com/DailyScreen/PlexusFeed" }, { name: "TerminalLikePortfolio", description: "A personal website styled for UNIX terminal.", link: "https://github.com/DailyScreen/TerminalLikePortfolio" } ],
+        };
+    </script>
+    <script>
+        // --- TERMINAL LOGIC ---
+        window.addEventListener("DOMContentLoaded", function () {
+            const term = document.getElementById("terminal");
+            const asciiArt = document.getElementById("ascii-art");
+            
+            // State variables
+            let history = [];
+            let historyIndex = 0;
+            const homeDir = '/home/marecL';
+            let currentPath = homeDir;
+            let filesystem = config.filesystem;
 
-        <div id="suggestions"></div>
-        </div>
-    </body>
+            /**
+             * Resolves a given path to its absolute form.
+             * @param {string} path - The path to resolve.
+             * @returns {string} The absolute path.
+             */
+            const resolvePath = (path) => {
+                let components = (path.startsWith('/') ? [] : currentPath.split('/')).filter(Boolean);
+                const targetComponents = path.replace('~', homeDir).split('/').filter(Boolean);
+
+                for (const component of targetComponents) {
+                    if (component === '.') continue;
+                    if (component === '..') {
+                        if (components.length > 0) components.pop();
+                    } else {
+                        components.push(component);
+                    }
+                }
+                return '/' + components.join('/');
+            };
+
+            /**
+             * Retrieves a node (file or directory) from the filesystem.
+             * @param {string} path - The absolute path to the node.
+             * @returns {object|null} The node object or null if not found.
+             */
+            const getNode = (path) => {
+                const components = path.split('/').filter(Boolean);
+                let node = filesystem['/'];
+                for (const component of components) {
+                    if (node && node.type === 'directory' && node.children[component]) {
+                        node = node.children[component];
+                    } else {
+                        return null;
+                    }
+                }
+                return node;
+            };
+
+            /**
+             * Retrieves the parent node of a given path.
+             * @param {string} path - The absolute path.
+             * @returns {{parent: object, name: string}|null} The parent node and the child's name.
+             */
+            const getParentNode = (path) => {
+                const components = path.split('/').filter(Boolean);
+                const name = components.pop();
+                const parentPath = '/' + components.join('/');
+                return { parent: getNode(parentPath), name };
+            };
+
+            const scrollToBottom = () => { term.scrollTop = term.scrollHeight; };
+            const type = async (text, element) => {
+                for (let i = 0; i < text.length; i++) {
+                    element.innerHTML += text.charAt(i);
+                    await new Promise((resolve) => setTimeout(resolve, 10));
+                    scrollToBottom();
+                }
+            };
+
+            const createInputLine = () => {
+                const inputLine = document.createElement('div');
+                inputLine.className = 'input-line';
+                const promptPath = currentPath.replace(homeDir, '~');
+                inputLine.innerHTML = `
+                    <span class="prompt">
+                        <span class="ownerTerminal"><b>${config.owner}@${config.website}</b></span><b>:${promptPath}$</b>
+                    </span>
+                    <input class="cmd-input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                `;
+                term.appendChild(inputLine);
+                const inputField = inputLine.querySelector('.cmd-input');
+                inputField.focus();
+                inputField.addEventListener('keydown', handleKeyDown);
+                scrollToBottom();
+            };
+
+            const handleCommand = async (cmdStr) => {
+                const args = cmdStr.split(" ").filter(Boolean);
+                const commandName = args[0];
+                const command = config.commands.find(c => c.name === commandName || (c.aliases && c.aliases.includes(commandName)));
+                const outputElement = document.createElement("div");
+                term.appendChild(outputElement);
+
+                if (command) {
+                    switch (command.name) {
+                        case "help":
+                            const helpCmd = config.commands
+                                .map(cmd => `<div><span class="commandName">${cmd.name.padEnd(10)}</span> - ${cmd.description}</div>`)
+                                .join("");
+                            outputElement.innerHTML = helpCmd;
+                            break;
+                        case "clear":
+                            const startup = document.getElementById('startup');
+                            let nextSibling = startup.nextElementSibling;
+                            while (nextSibling) {
+                                term.removeChild(nextSibling);
+                                nextSibling = startup.nextElementSibling;
+                            }
+                            startup.style.display = 'block'; // Ensure startup is visible if cleared
+                            break;
+                        case "reboot": window.location.reload(); break;
+                        case "date": outputElement.textContent = new Date().toString(); break;
+                        case "whoami": outputElement.textContent = config.owner; break;
+                        case "history": outputElement.innerHTML = history.map((h, i) => `${i}: ${h}`).join('<br>'); break;
+                        case "echo": outputElement.textContent = args.slice(1).join(' '); break;
+                        case "sudo": await type("User is not in the sudoers file. This incident will be reported.", outputElement); break;
+                        case "ls":
+                            const lsPath = resolvePath(args[1] || '.');
+                            const lsNode = getNode(lsPath);
+                            if (lsNode && lsNode.type === 'directory') {
+                                outputElement.innerHTML = `<pre>${Object.keys(lsNode.children).join('\n')}</pre>`;
+                            } else {
+                                outputElement.innerHTML = `<span class="error">ls: cannot access '${args[1] || '.'}': No such file or directory</span>`;
+                            }
+                            break;
+                        case "cd":
+                            const cdPath = resolvePath(args[1] || homeDir);
+                            const cdNode = getNode(cdPath);
+                            if (cdNode && cdNode.type === 'directory') {
+                                currentPath = cdPath;
+                            } else {
+                                outputElement.innerHTML = `<span class="error">cd: no such file or directory: ${args[1] || homeDir}</span>`;
+                            }
+                            break;
+                        case "pwd": outputElement.textContent = currentPath; break;
+                        case "cat":
+                            if (!args[1]) { outputElement.innerHTML = `<span class="error">cat: missing file operand</span>`; break; }
+                            const catPath = resolvePath(args[1]);
+                            const catNode = getNode(catPath);
+                            if (catNode && catNode.type === 'file') {
+                                outputElement.innerHTML = `<pre>${catNode.content}</pre>`;
+                            } else if (catNode && catNode.type === 'directory') {
+                                outputElement.innerHTML = `<span class="error">cat: ${args[1]}: Is a directory</span>`;
+                            } else {
+                                outputElement.innerHTML = `<span class="error">cat: ${args[1]}: No such file or directory</span>`;
+                            }
+                            break;
+                        case "touch":
+                            if (!args[1]) { outputElement.innerHTML = `<span class="error">touch: missing file operand</span>`; break; }
+                            const touchPath = resolvePath(args[1]);
+                            const { parent: touchParent, name: touchName } = getParentNode(touchPath);
+                            if (touchParent && touchParent.type === 'directory' && !touchParent.children[touchName]) {
+                                touchParent.children[touchName] = { type: 'file', content: '' };
+                            } else if (!touchParent) {
+                                outputElement.innerHTML = `<span class="error">touch: cannot touch '${args[1]}': No such file or directory</span>`;
+                            }
+                            break;
+                        case "mkdir":
+                             if (!args[1]) { outputElement.innerHTML = `<span class="error">mkdir: missing operand</span>`; break; }
+                            const mkdirPath = resolvePath(args[1]);
+                            const { parent: mkdirParent, name: mkdirName } = getParentNode(mkdirPath);
+                            if (mkdirParent && mkdirParent.type === 'directory' && !mkdirParent.children[mkdirName]) {
+                                mkdirParent.children[mkdirName] = { type: 'directory', children: {} };
+                            } else if (!mkdirParent) {
+                                outputElement.innerHTML = `<span class="error">mkdir: cannot create directory '${args[1]}': No such file or directory</span>`;
+                            } else {
+                                outputElement.innerHTML = `<span class="error">mkdir: cannot create directory '${args[1]}': File exists</span>`;
+                            }
+                            break;
+                        case "rm":
+                            if (!args[1]) { outputElement.innerHTML = `<span class="error">rm: missing operand</span>`; break; }
+                            const rmPath = resolvePath(args[1]);
+                            const { parent: rmParent, name: rmName } = getParentNode(rmPath);
+                            if (rmParent && rmParent.children[rmName]) {
+                                delete rmParent.children[rmName];
+                            } else {
+                                outputElement.innerHTML = `<span class="error">rm: cannot remove '${args[1]}': No such file or directory</span>`;
+                            }
+                            break;
+                        case "skills": outputElement.innerHTML = `<pre>${config.skills.map(skill => `${skill.name.padEnd(10)} [${"#".repeat(Math.round(skill.level / 10)).padEnd(10)}] ${skill.level}%`).join("\n")}</pre>`; break;
+                        case "projects": outputElement.innerHTML = `<pre>${config.projects.map(project => `\n<a href="${project.link}" target="_blank">${project.name}</a>\n- ${project.description}\n`).join("")}</pre>`; break;
+                        case "github": outputElement.innerHTML = `Opening GitHub...`; window.open(config.links.github, "_blank"); break;
+                        case "theme": 
+                            config.theme = config.theme === "dark" ? "light" : "dark";
+                            const colors = config.colors[config.theme];
+                            for (const [key, value] of Object.entries(colors)) {
+                                document.documentElement.style.setProperty(`--${key}`, value);
+                            }
+                            await type(`Theme changed to ${config.theme}`, outputElement); 
+                            break;
+                        case "neofetch": 
+                            let info = Object.entries(config.neofetch.info).map(([key, value]) => `<div><span class="commandName">${key.padEnd(12)}</span>: ${value}</div>`).join("");
+                            outputElement.innerHTML = `<div class="neofetchContainer"><pre>${config.neofetch.ascii}</pre><div>${info}</div></div>`;
+                            break;
+                    }
+                } else {
+                    await type(`<span class="error">command not found: ${commandName}</span>`, outputElement);
+                }
+            };
+
+            const handleKeyDown = async (event) => {
+                const inputField = event.target;
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    const cmdStr = inputField.value.trim();
+                    
+                    const staticLine = document.createElement('div');
+                    staticLine.innerHTML = inputField.parentElement.innerHTML;
+                    staticLine.querySelector('.cmd-input').remove();
+                    staticLine.insertAdjacentHTML('beforeend', ` ${cmdStr}`);
+                    inputField.parentElement.replaceWith(staticLine);
+
+                    if (cmdStr !== "") {
+                        history.push(cmdStr);
+                        historyIndex = history.length;
+                        await handleCommand(cmdStr);
+                    }
+                    createInputLine();
+
+                } else if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    if (historyIndex > 0) {
+                        historyIndex--;
+                        inputField.value = history[historyIndex];
+                    }
+                } else if (event.key === "ArrowDown") {
+                    event.preventDefault();
+                    if (historyIndex < history.length - 1) {
+                        historyIndex++;
+                        inputField.value = history[historyIndex];
+                    } else {
+                        historyIndex = history.length;
+                        inputField.value = "";
+                    }
+                }
+            };
+
+            const init = () => {
+                asciiArt.innerHTML = config.ascii;
+                term.addEventListener('click', () => {
+                    const inputField = term.querySelector('.cmd-input');
+                    if (inputField) inputField.focus();
+                });
+                createInputLine();
+            };
+            
+            init();
+        });
+    </script>
+</body>
 </html>
