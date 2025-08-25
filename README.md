@@ -1,4 +1,3 @@
-
 # Terminal Like Portfolio  
 This **Portfolio** is designed like a UNIX terminal as a way to showcase my skills with web related languages
 
