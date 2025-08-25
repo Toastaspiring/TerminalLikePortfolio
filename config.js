@@ -9,14 +9,7 @@ const config = {
     // The ascii art to display.
     // You can use this website to generate ascii art: https://patorjk.com/software/taag/
     // and this website to convert it to a string: https://tools.knowledgewalls.com/convert-multiline-string-to-single-line
-    ascii: `
-    d8888b.  .d8b.  d8888b. d88888b d8888b. d88888b  .d88b.  db    db
-    88  '8D d8' '8b 88  '8D 88'     88  '8D 88'     .8P  Y8. '8b  d8'
-    88   88 88ooo88 88oobY' 88ooooo 88oobY' 88ooooo 88    88  '8bd8'
-    88   88 88~~~88 88'b..  88~~~~~ 88'b..  88~~~~~ 88    88    88
-    88  .8D 88   88 88'  YD. 88.     88'  YD. 88.     '8b  d8.   88
-    Y8888D' YP   YP 88'   YD Y88888P 88'   YD Y88888P  'Y88P'    YP
-    `,
+    ascii: "███╗   ███╗ █████╗ ██████╗ ███████╗ ██████╗  \n████╗ ████║██╔══██╗██╔══██╗██╔════╝██╔════╝  \n██╔████╔██║███████║██████╔╝█████╗  ██║       \n██║╚██╔╝██║██╔══██║██╔══██╗██╔══╝  ██║       \n██║ ╚═╝ ██║██║  ██║██║  ██║███████╗╚██████╗ \n╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ",
 
     // -- THEME --
     // The theme of the terminal. You can choose between "dark" and "light".
@@ -106,7 +99,49 @@ const config = {
             description: "Display system information",
             aliases: ["nf"],
         },
+        {
+            name: "ls",
+            description: "List files and directories",
+            aliases: [],
+        },
+        {
+            name: "cd",
+            description: "Change directory",
+            aliases: [],
+        },
+        {
+            name: "cat",
+            description: "Display file content",
+            aliases: [],
+        },
     ],
+
+    filesystem: {
+        "~": {
+            type: "directory",
+            children: {
+                about: {
+                    type: "directory",
+                    children: {
+                        "me.txt": {
+                            type: "file",
+                            content: "I'm a web developer from France.",
+                        },
+                    },
+                },
+                projects: {
+                    type: "directory",
+                    children: {
+                        "portfolio.txt": {
+                            type: "file",
+                            content:
+                                "This portfolio was made with HTML, CSS and JS.",
+                        },
+                    },
+                },
+            },
+        },
+    },
 
     neofetch: {
         ascii: `
