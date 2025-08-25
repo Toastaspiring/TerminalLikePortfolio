@@ -16,14 +16,7 @@ window.addEventListener("DOMContentLoaded", function () {
     let currentSuggestionIndex = -1;
 
     const init = () => {
-        // set the theme
-        const theme = config.theme;
-        const colors = config.colors[theme];
-
-        // set the colors
-        for (const [key, value] of Object.entries(colors)) {
-            document.documentElement.style.setProperty(`--${key}`, value);
-        }
+        applyTheme();
 
         // set the owner
         term.owner.innerHTML = `<b>${config.owner}@${config.website}</b>`;
@@ -119,10 +112,30 @@ window.addEventListener("DOMContentLoaded", function () {
                 case "webnovel":
                     window.open(config.links.webnovel, "_blank");
                     break;
+                case "theme":
+                    toggleTheme();
+                    await type(`Theme changed to ${config.theme}`, outputElement);
+                    break;
+                case "neofetch":
+                    await type(getNeofetch(), outputElement);
+                    break;
             }
         } else {
             await type(`command not found: ${cmd}`, outputElement);
         }
+    };
+
+    const applyTheme = () => {
+        const theme = config.theme;
+        const colors = config.colors[theme];
+        for (const [key, value] of Object.entries(colors)) {
+            document.documentElement.style.setProperty(`--${key}`, value);
+        }
+    };
+
+    const toggleTheme = () => {
+        config.theme = config.theme === "dark" ? "light" : "dark";
+        applyTheme();
     };
 
     const getSkills = () => {
@@ -143,6 +156,19 @@ window.addEventListener("DOMContentLoaded", function () {
             }</a>\n- ${project.description}\n`;
         });
         return projects;
+    };
+
+    const getNeofetch = () => {
+        let neofetch = "<pre>";
+        neofetch += config.neofetch.ascii;
+        neofetch += "</pre>";
+        neofetch += "<div>";
+        for (const [key, value] of Object.entries(config.neofetch.info)) {
+            neofetch += `<div><span class="commandName">${key}</span>: ${value}</div>`;
+        }
+        neofetch += "</div>";
+
+        return `<div class="neofetchContainer">${neofetch}</div>`;
     };
 
     init();

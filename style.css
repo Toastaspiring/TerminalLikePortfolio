@@ -32,6 +32,7 @@ body {
     background-size: 100%;
     position: relative;
     margin: 10px;
+    text-shadow: 0 0 5px var(--text);
 }
 
 body .plane {
@@ -83,9 +84,11 @@ body #terminal #output {
 }
 body #terminal #input {
     margin-top: 20px;
+    display: flex;
 }
 body #terminal #prompt {
     font-weight: 700;
+    white-space: nowrap;
 }
 body #terminal #cmd {
     font-family: monospace;
@@ -95,7 +98,7 @@ body #terminal #cmd {
     color: var(--text);
     outline: 0;
     transition: caret-color 0.3s ease;
-    width: 70%;
+    flex-grow: 1;
 }
 body #terminal #cmd:focus {
     caret-color: transparent;
@@ -162,5 +165,10 @@ a:hover {
 pre {
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+.neofetchContainer {
+    display: flex;
+    gap: 20px;
 }
   
